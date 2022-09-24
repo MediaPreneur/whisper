@@ -92,11 +92,7 @@ def transcribe(
         temperatures = [temperature] if isinstance(temperature, (int, float)) else temperature
         kwargs = {**decode_options}
         t = temperatures[0]
-        if t == 0:
-            best_of = kwargs.pop("best_of", None)
-        else:
-            best_of = kwargs.get("best_of", None)
-
+        best_of = kwargs.pop("best_of", None) if t == 0 else kwargs.get("best_of")
         options = DecodingOptions(**kwargs, temperature=t)
         results = model.decode(segment, options)
 
@@ -277,11 +273,11 @@ def cli():
         audio_basename = os.path.basename(audio_path)
 
         # save TXT
-        with open(os.path.join(output_dir, audio_basename + ".txt"), "w", encoding="utf-8") as txt:
+        with open(os.path.join(output_dir, f"{audio_basename}.txt"), "w", encoding="utf-8") as txt:
             print(result["text"], file=txt)
 
         # save VTT
-        with open(os.path.join(output_dir, audio_basename + ".vtt"), "w", encoding="utf-8") as vtt:
+        with open(os.path.join(output_dir, f"{audio_basename}.vtt"), "w", encoding="utf-8") as vtt:
             write_vtt(result["segments"], file=vtt)
 
 
