@@ -189,9 +189,7 @@ class TextDecoder(nn.Module):
             x = block(x, xa, mask=self.mask, kv_cache=kv_cache)
 
         x = self.ln(x)
-        logits = (x @ self.token_embedding.weight.to(x.dtype).T).float()
-
-        return logits
+        return (x @ self.token_embedding.weight.to(x.dtype).T).float()
 
 
 class Whisper(nn.Module):
